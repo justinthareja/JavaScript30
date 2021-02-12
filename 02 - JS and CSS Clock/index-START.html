@@ -62,12 +62,90 @@
       background: black;
       position: absolute;
       top: 50%;
+
+      transform-origin: 100%;
+      transition: transform 0.2s ease;
+    }
+
+    .move {
+      transform: 
     }
 
   </style>
 
   <script>
+    // Degrees per second
+    const SECOND_HAND_RATE = 360 / 60;
+    const MINUTE_HAND_RATE = 360 / 60 / 60;
+    const HOUR_HAND_RATE = 360 / 60 / (60 * 12);
 
+    // Initialize Hands to Current Time
+    init();
+
+    // Move hands every second
+    setInterval(tick, 1000);
+
+
+    function init() {
+      const now = new Date();
+
+      setHand("second", toDegrees("second", now.getSeconds()));
+      setHand("min", toDegrees("min", now.getMinutes()));
+      setHand("hour", toDegrees("hour", now.getHours()));
+    }
+
+    function tick() {
+      incrementHand("second", SECOND_HAND_RATE);
+      incrementHand("min", MINUTE_HAND_RATE);
+      incrementHand("hour", HOUR_HAND_RATE);
+    }
+
+    function incrementHand(type, increment) {
+      const deg = getCurrentDegrees(type);
+
+      setHand(type, deg + increment);
+    }
+
+    function setHand(type, degrees) {
+      const $hand = getHand(type);
+
+      if (degrees > 360) {
+        degrees -= 360;
+      }
+
+      degrees = Math.round(degrees);
+
+      $hand.style.transform = `rotate(${degrees}deg)`;
+    }
+
+    function toDegrees(type, value) {
+      let result = 90;
+
+      if (type == "second") {
+        result += value * 6;
+      } else if (type == "min") {
+        result += value * 6;
+      } else if (type == "hour") {
+        result += value * 30;
+      } else {
+        
+      }
+
+      return result;
+    }
+
+    function getHand(type) {
+      return document.querySelector(`.${type}-hand`);
+    }
+
+    function getCurrentDegrees(type) {
+      const $hand = getHand(type);
+      const degrees = $hand.style.transform.replace(/\D/g, "");
+
+      if (degrees != "") {
+        return Number(degrees);
+      }
+    }
 
   </script>
 </body>
