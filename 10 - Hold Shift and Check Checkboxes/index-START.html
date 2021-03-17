@@ -99,27 +99,15 @@
   const $inputs = document.querySelectorAll("input");
   $inputs.forEach(($input) => $input.addEventListener("click", handleInputClick));
 
-  document.addEventListener("keydown", toggleShiftDown)
-  document.addEventListener("keyup", toggleShiftDown);
-
-  let shiftDown = false;
   let start = -1;
   let end = -1;
-  
-  function toggleShiftDown(e) {
-    if (e.key !== "Shift") {
-      return;
-    }
-    
-    shiftDown = !shiftDown;
-  }
   
   function handleInputClick(e) {
     const index = Array.from($inputs).findIndex($input => $input === e.target);
 
-    if (!shiftDown && e.target.checked) {
+    if (!e.shiftKey && e.target.checked) {
       start = index;
-    } else if (shiftDown && e.target.checked && start >= 0) {
+    } else if (e.shiftKey && e.target.checked && start >= 0) {
       end = index;
     }
 
