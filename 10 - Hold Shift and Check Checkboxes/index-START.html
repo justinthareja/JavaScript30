@@ -96,6 +96,46 @@
   </div>
 
 <script>
+  const $inputs = document.querySelectorAll("input");
+  $inputs.forEach(($input) => $input.addEventListener("click", handleInputClick));
+
+  document.addEventListener("keydown", toggleShiftDown)
+  document.addEventListener("keyup", toggleShiftDown);
+
+  let shiftDown = false;
+  let start = -1;
+  let end = -1;
+  
+  function toggleShiftDown(e) {
+    if (e.key !== "Shift") {
+      return;
+    }
+    
+    shiftDown = !shiftDown;
+  }
+  
+  function handleInputClick(e) {
+    const index = Array.from($inputs).findIndex($input => $input === e.target);
+
+    if (!shiftDown && e.target.checked) {
+      start = index;
+    } else if (shiftDown && e.target.checked && start >= 0) {
+      end = index;
+    }
+
+    if (start >= 0 && end >= 0) {
+      let begin = Math.min(start, end);
+      let finish = Math.max(start, end);
+
+      for (var i = begin; i <= finish; i++) {
+        let $input = $inputs[i];
+        $input.checked = true;
+      }
+
+      start = -1;
+      end = -1;
+    }
+  }
 </script>
 </body>
 </html>
